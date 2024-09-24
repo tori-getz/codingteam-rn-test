@@ -1,17 +1,29 @@
 import { useUnit } from 'effector-react';
-import React from 'react';
+import React, { useState } from 'react';
 import { ScrollView, StyleSheet } from 'react-native';
 import { RefreshControl } from 'react-native-gesture-handler';
-import { $posts, getPostsFx, PostCard } from '~/entities/post';
+import { $posts, PostCard } from '~/entities/post';
+import { allPostsUpdated, timerReseted } from '~/entities/post/model';
+import { LoadMorePosts } from '~/features/load-more-posts';
 
 export const PostsList: React.FC = () => {
-  const posts = useUnit($posts);
-  const postsLoading = useUnit(getPostsFx.pending);
+  const [posts, resetTimer] = useUnit([$posts, timerReseted]);
+  const [refreshLoading, setRefreshLoading] = useState<boolean>(false);
+
+  const onRefresh = async () => {
+    setRefreshLoading(true);
+
+    await allPostsUpdated();
+    await resetTimer();
+
+    setRefreshLoading(false);
+  };
 
   return (
     <ScrollView
       style={styles.posts}
-      refreshControl={<RefreshControl refreshing={postsLoading} onRefresh={getPostsFx} />}
+      contentContainerStyle={styles.posts__content}
+      refreshControl={<RefreshControl refreshing={refreshLoading} onRefresh={onRefresh} />}
     >
       {posts.map((post) => (
         <PostCard
@@ -21,6 +33,7 @@ export const PostsList: React.FC = () => {
           onPress={() => console.log(JSON.stringify(post))}
         />
       ))}
+      <LoadMorePosts />
     </ScrollView>
   );
 };
@@ -28,6 +41,8 @@ export const PostsList: React.FC = () => {
 const styles = StyleSheet.create({
   posts: {
     flex: 1,
+  },
+  posts__content: {
     padding: 8,
   },
 });

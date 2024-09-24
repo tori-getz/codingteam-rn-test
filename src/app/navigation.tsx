@@ -10,6 +10,7 @@ export const Navigation: React.FC = () => {
     <NavigationContainer>
       <Stack.Navigator>
         <Stack.Screen
+          options={{ title: 'Posts' }}
           name="PostsPage"
           component={PostsPage}
         />

@@ -1,0 +1,1 @@
+export { LoadMorePosts } from './ui';

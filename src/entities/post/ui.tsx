@@ -20,6 +20,7 @@ export const PostCard: React.FC<IPostCardProps> = ({ title, body, onPress }: IPo
 export const styles = StyleSheet.create({
   post: {
     padding: 8,
+    marginBottom: 8, // тут честно говоря не придумал ничего лучше, хотел gap применить, но чтото не пошло =(
   },
   post__title: {
     fontWeight: '800',
