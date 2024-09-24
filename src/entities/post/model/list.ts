@@ -1,6 +1,6 @@
 import { createEffect, createEvent, createStore, sample } from 'effector';
-import { getPosts } from './api';
-import { Post } from './schemas';
+import { getPosts } from '../api';
+import { Post } from '../schemas';
 import { UPDATE_POSTS_IN_SECONDS } from '~/env';
 import { AppState } from 'react-native';
 

@@ -1,6 +1,6 @@
 import { createEffect, createEvent, sample } from 'effector';
 import { $posts, getPosts } from '~/entities/post';
-import { $postsTotal } from '~/entities/post/model';
+import { $postsTotal } from '~/entities/post';
 
 export const getMorePostsFx = createEffect({
   name: 'get posts fx',

@@ -1,9 +1,8 @@
 import { useUnit } from 'effector-react';
 import React, { useState } from 'react';
-import { ScrollView, StyleSheet } from 'react-native';
-import { RefreshControl } from 'react-native-gesture-handler';
-import { $posts, PostCard } from '~/entities/post';
-import { allPostsUpdated, timerReseted } from '~/entities/post/model';
+import { FlatList, RefreshControl, StyleSheet } from 'react-native';
+import { navigate } from '~/app/navigation';
+import { $posts, PostCard, allPostsUpdated, timerReseted } from '~/entities/post';
 import { LoadMorePosts } from '~/features/load-more-posts';
 
 export const PostsList: React.FC = () => {
@@ -20,28 +19,24 @@ export const PostsList: React.FC = () => {
   };
 
   return (
-    <ScrollView
-      style={styles.posts}
-      contentContainerStyle={styles.posts__content}
+    <FlatList
+      data={posts}
+      keyExtractor={(post) => post.id.toString()}
       refreshControl={<RefreshControl refreshing={refreshLoading} onRefresh={onRefresh} />}
-    >
-      {posts.map((post) => (
+      renderItem={({ item }) => (
         <PostCard
-          title={post.title}
-          body={post.body}
-          key={post.id}
-          onPress={() => console.log(JSON.stringify(post))}
+          title={item.title}
+          body={item.body}
+          onPress={() => navigate('PostPage', { postId: item.id })}
         />
-      ))}
-      <LoadMorePosts />
-    </ScrollView>
+      )}
+      contentContainerStyle={styles.posts__content}
+      ListFooterComponent={<LoadMorePosts />}
+    />
   );
 };
 
 const styles = StyleSheet.create({
-  posts: {
-    flex: 1,
-  },
   posts__content: {
     padding: 8,
   },
